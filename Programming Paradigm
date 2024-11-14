@@ -14,4 +14,20 @@ Building Blocks
 
 Language:C, C++
 
+--------------------------
+Paradigm:	Object Oriented
+Concepts
+1) Encapsulation
+2) Inheritance
+3) Polymorphism
+4) Abstraction
 
+
+Building Blocks
+1) Class
+2) Base and Derived Class
+3) Function pverloading, Operator Overloading, Virtual functions
+4) Pure Virtual function
+
+Language: C++
+--------------------------
