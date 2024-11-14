@@ -31,3 +31,35 @@ Building Blocks
 
 Language: C++
 --------------------------
+Paradigm:	Functional
+
+Concepts
+1) First-Class Functions
+2) Pure Functions
+3) Immutability
+4) Higher-Order Functions
+5) Function Composition
+6) Recursion
+7) Lazy Evaluation
+8) Referential Transparency
+--------------------------
+Paradigm:	Aspect oriented Programming
+
+Concepts: 
+1) Aspects
+2) Join Points
+3) Pointcuts
+4) Advice
+5) Weaving
+6) Inter-Type Declarations
+--------------------------
+Paradigm:	Event driven
+
+Concepts: 
+1) Event and Event Handler
+2) Event Loop
+3) Callback Functions
+4) Listeners and Emitters:
+5) Concurrency and Asynchrony
+
+
