@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #include <vector>
 #include <string>
+#include <functional>
 
 using namespace std;
 
@@ -16,49 +17,48 @@ class stringarray_filteroperations
 
     vector<string> StartsWith (const char& letter)
     {
-        auto CheckString_startsWith =  [letter] (const string& str)-> bool
-        {
+        auto CheckString_startsWith =  [letter] (const string& str) -> bool {
             if (str.at(0) == letter)
                 return true;
             else
                 return false;
         };
-        return (FilterString(&CheckString_startsWith));
+        return (FilterString(CheckString_startsWith));
     }
     
     vector<string> EndsWith (const char& letter)
     {
-        auto CheckString_endsWith =  [letter] (const string& str)-> bool
+        auto CheckString_endsWith =  [letter] (const string& str) -> bool
         {
             if (str.at(str.length()-1) == letter)
                 return true;
             else
                 return false;
         };
-        return (FilterString(&CheckString_endsWith));
+        return (FilterString(CheckString_endsWith));
     }
     
     vector<string> length (const int& len)
     {
-        auto CheckString_length =  [len] (const string& str)-> bool
+        auto CheckString_length =  [len] (const string& str) -> bool
         {
             if (str.length() == len)
                 return true;
             else
                 return false;
         };     
-        return (FilterString(&CheckString_length));
+        return (FilterString(CheckString_length));
     }
     
     private:
     vector<string> data;
     
-    vector<string> FilterString(bool (*fp) (const string&))
+    vector<string> FilterString(function <bool (const string&)> func)
     {
         vector<string> retList;
         for (auto name: data)
         {
-            if ((*fp) (name))
+            if (func (name))
                 retList.push_back(name);
         }
         return retList;        
@@ -88,8 +88,8 @@ int main() {
 	cout<< "Names ending with e:" << endl;
 	Print_Strings (name_EndsWith_e);
 	
-	/*vector<string> name_length_4 = Obj.length(4);
+	vector<string> name_length_4 = Obj.length(4);
 	cout<< "Names with length 4:" << endl;
-	Print_Strings (name_length_4);*/
+	Print_Strings (name_length_4);
 
 }
