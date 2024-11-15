@@ -16,49 +16,42 @@ class stringarray_filteroperations
 
     vector<string> StartsWith (const char& letter)
     {
-        
-        CheckString_startsWith =  [letter, data]()
-        
-        
+        auto CheckString_startsWith =  [letter] (const string& str)-> bool
+        {
+            if (str.at(0) == letter)
+                return true;
+            else
+                return false;
+        };
         return (FilterString(&CheckString_startsWith));
     }
     
     vector<string> EndsWith (const char& letter)
     {
-        return (FilterString(&CheckString_endssWith, letter));
+        auto CheckString_endsWith =  [letter] (const string& str)-> bool
+        {
+            if (str.at(str.length()-1) == letter)
+                return true;
+            else
+                return false;
+        };
+        return (FilterString(&CheckString_endsWith));
     }
     
-    /* vector<string> length (const int& len)
+    vector<string> length (const int& len)
     {
-        return (FilterString(&CheckString_endssWith, letter));
-    }*/
+        auto CheckString_length =  [len] (const string& str)-> bool
+        {
+            if (str.length() == len)
+                return true;
+            else
+                return false;
+        };     
+        return (FilterString(&CheckString_length));
+    }
     
     private:
     vector<string> data;
-    
-    static bool CheckString_startsWith (const string& str, const char& StartingChar)
-    {
-        if (str.at(0) == StartingChar)
-            return true;
-        else
-            return false;
-    }
-    
-    static bool CheckString_endssWith (const string& str, const char& EndingChar)
-    {
-        if (str.at(str.length()-1) == EndingChar)
-            return true;
-        else
-            return false;
-    }
-    
-    static bool CheckString_length (const string& str, const int& len)
-    {
-        if (str.length() == len)
-            return true;
-        else
-            return false;
-    }
     
     vector<string> FilterString(bool (*fp) (const string&))
     {
