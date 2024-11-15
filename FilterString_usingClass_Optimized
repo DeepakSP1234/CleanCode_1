@@ -1,0 +1,98 @@
+#include <bits/stdc++.h>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+class stringarray_filteroperations
+{
+    
+    public:
+    stringarray_filteroperations(const vector<string>& strings)
+    {
+        data = strings;
+    }
+    
+
+    vector<string> StartsWith (const char& letter)
+    {
+        return (FilterString(&CheckString_startsWith, letter));
+    }
+    
+    vector<string> EndsWith (const char& letter)
+    {
+        return (FilterString(&CheckString_endssWith, letter));
+    }
+    
+    /* vector<string> length (const int& len)
+    {
+        return (FilterString(&CheckString_endssWith, letter));
+    }*/
+    
+    private:
+    vector<string> data;
+    
+    static bool CheckString_startsWith (const string& str, const char& StartingChar)
+    {
+        if (str.at(0) == StartingChar)
+            return true;
+        else
+            return false;
+    }
+    
+    static bool CheckString_endssWith (const string& str, const char& EndingChar)
+    {
+        if (str.at(str.length()-1) == EndingChar)
+            return true;
+        else
+            return false;
+    }
+    
+    static bool CheckString_length (const string& str, const int& len)
+    {
+        if (str.length() == len)
+            return true;
+        else
+            return false;
+    }
+    
+    vector<string> FilterString(bool (*fp) (const string&, const char&), const char& letter )
+    {
+        vector<string> retList;
+        for (auto name: data)
+        {
+            if ((*fp) (name,letter))
+                retList.push_back(name);
+        }
+        return retList;        
+    }
+
+};
+
+
+void Print_Strings(vector<string> strings)
+{
+    for ( auto data : strings)
+    {
+        cout << data << endl;
+    }
+}
+
+int main() {
+	vector<string> names = {"bosch", "bengaluru", "red", "lemon", "hire", "some"};
+	
+	stringarray_filteroperations Obj(names); 
+	
+	vector<string> name_StartsWith_b = Obj.StartsWith('b');
+	cout<< "Names starting with b:" << endl;
+	Print_Strings (name_StartsWith_b);
+	
+	vector<string> name_EndsWith_e = Obj.EndsWith('e');
+	cout<< "Names ending with e:" << endl;
+	Print_Strings (name_EndsWith_e);
+	
+	/*vector<string> name_length_4 = Obj.length(4);
+	cout<< "Names with length 4:" << endl;
+	Print_Strings (name_length_4);*/
+
+}
