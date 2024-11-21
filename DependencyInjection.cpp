@@ -28,12 +28,17 @@ class Engine{
 
 class Car{
     Engine engine;
+    // Dependecy
     BoschTPMS *tpms_ptr;
 
     public:
-        Car(BoschTPMS& tpms){
+        Car(BoschTPMS& tpms){ // Dependency Injection using constructor
             tpms_ptr = &tpms;
             cout<<"Car Constructed"<<endl;
+        }
+        void InstallTPMS(BoschTPMS& tpms) {  // Dependency Injection using method
+                    tpms_ptr = &tpms;
+                    cout<<"Install TPMS"<<endl;
         }
 
         ~Car(){
