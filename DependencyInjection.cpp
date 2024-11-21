@@ -1,61 +1,163 @@
-#include <iostream>
-using namespace std;
-
 // Online C++ compiler to run C++ program online
+ 
 #include <iostream>
+
 using namespace std;
-class BoschTPMS{
-      public:
-     ~BoschTPMS(){
-            cout<<"BoschTPMS Destructed"<<endl;
+
+class RC{
+
+    string vehicleRegNo;
+
+     public:
+
+	~RC(){
+
+	cout<<"RC Destructed"<<endl;
+
+     }
+
+     RC(){
+
+	 cout<<"RC Constructed"<<endl;
+
+     }
+
+	};
+ 
+
+class TPMS{
+
+    public:
+
+    ~TPMS(){
+
+        cout<<"TPMS Destructed"<<endl;
+
         }
 
-      BoschTPMS(){
-            cout<<"BoschTPMS Constructed"<<endl;
+		TPMS(){
+
+		cout<<"TPMS Constructed"<<endl;
+
         }
+
 };
 
+class BoschTPMS : public TPMS{
+
+    public:
+
+    ~BoschTPMS(){
+
+        cout<<"Bosch TPMS Destructed"<<endl;
+
+        }
+
+		BoschTPMS(){
+
+		cout<<"Bosch TPMS Constructed"<<endl;
+
+        }
+
+};
+
+class NexDigitronTPMS: public TPMS{
+
+    public:
+
+    ~NexDigitronTPMS(){
+
+        cout<<"NexDigitron TPMS Destructed"<<endl;
+
+        }
+
+		NexDigitronTPMS(){
+
+		cout<<"NexDigitron TPMS Constructed"<<endl;
+
+        }
+
+};
+
+
+ 
 class Engine{
+ 
     public:
-     ~Engine(){
+
+	~Engine(){
+
             cout<<"Engine Destructed"<<endl;
+
         }
-        
+
       Engine(){
+
             cout<<"Engine Constructed"<<endl;
-        }
-};
 
+			}
+
+	};
+	
+	
+ 
 class Car{
-    Engine engine;
-    // Dependecy
-    BoschTPMS *tpms_ptr;
 
-    public:
-        Car(BoschTPMS& tpms){ // Dependency Injection using constructor
-            tpms_ptr = &tpms;
-            cout<<"Car Constructed"<<endl;
-        }
-        void InstallTPMS(BoschTPMS& tpms) {  // Dependency Injection using method
-                    tpms_ptr = &tpms;
-                    cout<<"Install TPMS"<<endl;
-        }
+	Engine engine;
 
-        ~Car(){
-            cout<<"Car Destructed"<<endl;
-        }
+	TPMS* tpms;
+
+    string regNumber;
+
+	public:
+
+	Car(TPMS* ptr):tpms{ptr}{
+
+		cout<<"Car Constructed"<<endl;
+
+	}
+
+	~Car(){
+
+			cout<<"Car Destructed"<<endl;
+
+		}
+
+	void installTPMS(TPMS* ptr){
+
+			tpms=ptr;
+
+	}
+
 };
+ 
+void buildCar(BoschTPMS* ptr){
 
-BoschTPMS tpms_frontright;
+    Car alto{ptr};
 
-void buildCar(){
-    Car alto(tpms_frontright);
 }
 
+void buildCar(NexDigitronTPMS* ptr){
+
+    Car swift{ptr};
+
+}
+ 
+ 
 int main() {
+ 
     // Write C++ code here
-    buildCar();
-    cout<< "end of main" << endl;
+
+	BoschTPMS bTpms;
+
+	NexDigitronTPMS ndTpms;
+
+    buildCar(&bTpms);
+
+	buildCar(&ndTpms);
+
     return 0;
+ 
 }
+
  
