@@ -3,7 +3,7 @@
 #include <string>
 using namespace std;
 
-class IOTCloudCommunicator{
+class IOTCloudCommunicator: public CloundInterface{
     public:
           int  pushMessage(string message){
               //Interact with internet and push the message to MessageQueue
@@ -16,7 +16,8 @@ class IOTCloudCommunicator{
           }
 
 };
-class BNFSpeedSensor{
+class BNFSpeedSensor: public SensorInterface
+{
         public:
             int   getCurrentSpeed(){
                 std::random_device rd;
@@ -26,12 +27,37 @@ class BNFSpeedSensor{
             }
 };
 
+
+class SensorInterface
+{
+  public:
+      virtual int getCurrentSpeed() = 0;
+      double convertToMph(int speedKmph)
+      {
+          return (speedKmph * 0.621371);
+      }
+};
+
+class CloundInterface
+{
+    public:
+    virtual int pushMessage(string) =0;
+}
+
+
 class SpeedMonitor{
     private : int _speedThreshold;
   
       public:
-          SpeedMonitor(int speedThreshold): _speedThreshold{speedThreshold} {}
-          bool isSpeedOutOfRange(){
+          SpeedMonitor ( int speedThreshold){
+            _speedThreshold = speedThreshold;
+          }
+          
+          int getSpeedThreshold(){
+              return _speedThreshold;
+          }
+          
+          bool isSpeedThresholdOutOfRange(){
             bool retVal = false;
             if(_speedThreshold  < 1 || _speedThreshold > 100){
               cout<<"_speedThreshold value must be in the ramge {1-100} "<<_speedThreshold<<endl;
@@ -41,19 +67,32 @@ class SpeedMonitor{
             return retVal;
           }
               
-            BNFSpeedSensor speedSensorInstance;
-            IOTCloudCommunicator cloudCommuniccator;
-            int currentSpeedInKmph=speedSensorInstance.getCurrentSpeed();
-            
-            cout<<"Current Speed In Kmph "<<currentSpeedInKmph<<endl;
-            if(currentSpeedInKmph > _speedThreshold){
-                  double mph = currentSpeedInKmph * 0.621371;
-                  string message="Current Speed in Miles "+ to_string(mph);
-                 int statusCode= cloudCommuniccator.pushMessage(message);
-                  if(statusCode > 400){
-                      //Log Message to Console
-                       cout<<"Error In Communication Unable to Contact Server "<<message<< endl;
+          bool speedMonitor (SensorInterface & sensorObj, CloundInterface&  cloudObj) {
+                 int currentSpeed = sensorObj.getCurrentSpeed();
+                 
+                 cout<<"Current Speed In Kmph "<<currentSpeed<<endl;
+                 
+                 if(currentSpeedInKmph > _speedThreshold){
+                      
+                      return false;
+                      cout << "Current speed is greater than Theshold"  << endl;
+                 }
+                 else
+                 {
+                       double mph = convertToMph(currentSpeed);
+                       string message="Current Speed in Miles "+ to_string(mph);
+                       
+                       int statusCode= cloudObj.pushMessage(message);
+                       
+                        if(statusCode > 400){
+                           //Log Message to Console
+                           cout<<"Error In Communication Unable to Contact Server "<<message<< endl;
+                        }
+                      
+                      return True;
                   }
+                       
+                 }
                  
             }
               
@@ -61,10 +100,14 @@ class SpeedMonitor{
 };
 
 int main(){
-SpeedMonitor instance {10};
-  instance.monitor();
-  instance.monitor();
-  instance.monitor();
-  instance.monitor();
-  instance.monitor();
+  
+  BNFSpeedSensor speedSensorObj;
+  IOTCloudCommunicator cloudObj;
+  
+  SpeedMonitor instance(10) ;
+  bool isThresholdOutOfRange=  instance.isSpeedThresholdOutOfRange();
+  if (isThresholdOutOfRange == false)
+  {
+      instance.monitor(speedSensorObj, cloudObj);
+  }
 }
