@@ -9,9 +9,13 @@ class Icon
   virtual void flair()=0;
   
   protected:
-      Icon(float speed_q,float glow_q, float energy_q): 
-      speed(speed_q),glow(glow_q),energy(energy_q) 
-      {};
+      Icon(float speed,float glow, float energy)
+      {
+        this->speed = speed;
+        this->glow = glow;
+        this->energy = energy;
+        
+      };
   
   private:
       float speed, glow, energy;
@@ -22,11 +26,11 @@ class spinner: public Icon
 {
   
   public:
-    spinner(bool spinDir, bool expand_q,
-    float speed_q,float glow_q, float energy_q) :
-    Icon::Icon(speed_q,glow_q,energy_q){
-        clockwise = spinDir;
-        expand = expand_q;
+    spinner(bool clockwise, bool expand,
+    float speed,float glow, float energy) :
+    Icon::Icon(speed,glow,energy){
+        this-> clockwise = clockwise;
+        this-> expand = expand;
     }
     
     virtual void move(){
@@ -44,11 +48,11 @@ class spinner: public Icon
 class slider : public Icon
 {
     public:
-    slider (bool vertical_q, int distance_q,
-    float speed_q,float glow_q, float energy_q) :
-    Icon::Icon(speed_q,glow_q,energy_q){
-        vertical = vertical_q;
-        distance = distance_q;
+    slider (bool vertical, int distance,
+    float speed,float glow, float energy) :
+    Icon::Icon(speed,glow,energy){
+        this-> vertical = vertical;
+        this-> distance = distance;
     }
     
     virtual void move(){
@@ -67,13 +71,13 @@ class slider : public Icon
 class hopper : public Icon
 {
   public: 
-    hopper (bool visible_q, int xcoord_q, int ycoord_q,
-    float speed_q,float glow_q, float energy_q) :
-    Icon::Icon(speed_q,glow_q,energy_q)
+    hopper (bool visible, int xcoord, int ycoord,
+    float speed,float glow, float energy) :
+    Icon::Icon(speed,glow,energy)
     {
-        visible = visible_q;
-        xcoord = xcoord_q;
-        ycoord = ycoord_q;
+        this-> visible = visible;
+        this-> xcoord = xcoord;
+        this-> ycoord = ycoord;
     } 
     
     virtual void move(){
