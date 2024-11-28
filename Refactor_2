@@ -1,11 +1,11 @@
-#include <iostream>
+e#include <iostream>
 #include <random> 
 #include <string>
 using namespace std;
 
 class IOTCloudCommunicator: public CloundInterface{
     public:
-          int  pushMessage(string message){
+          int  pushMessage(string message) override{
               //Interact with internet and push the message to MessageQueue
             //if communiction succesfull return value from ramge {200 -400} status code otherwise returns errocode (400 - 500)
               std::random_device rd;
@@ -19,7 +19,7 @@ class IOTCloudCommunicator: public CloundInterface{
 class BNFSpeedSensor: public SensorInterface
 {
         public:
-            int   getCurrentSpeed(){
+            int   getCurrentSpeed() override{
                 std::random_device rd;
                 std::mt19937 gen(rd());
                 std::uniform_int_distribution<> distr(1, 100);
@@ -106,7 +106,7 @@ class SpeedMonitor{
                           // cout<<"Error In Communication Unable to Contact Server "<<message<< endl;
                         }
                       
-                      isSpeedAboveThresold = True;
+                      isSpeedAboveThresold = true;
                   }
                        
                  }
@@ -128,5 +128,9 @@ int main(){
   {   
       bool isSpeedAboveThresold;
       instance.monitor(speedSensorObj, cloudObj, isSpeedAboveThresold);
+      if (isSpeedAboveThresold)
+      {
+        logObj.logMsg("Speed exceeds threshold");
+      }
   }
 }
