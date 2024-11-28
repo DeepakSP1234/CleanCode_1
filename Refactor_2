@@ -1,9 +1,15 @@
-e#include <iostream>
+#include <iostream>
 #include <random> 
 #include <string>
 using namespace std;
 
-class IOTCloudCommunicator: public CloundInterface{
+class CloudInterface
+{
+    public:
+    virtual int pushMessage(string) =0;
+};
+
+class IOTCloudCommunicator: public CloudInterface {
     public:
           int  pushMessage(string message) override{
               //Interact with internet and push the message to MessageQueue
@@ -16,17 +22,6 @@ class IOTCloudCommunicator: public CloundInterface{
           }
 
 };
-class BNFSpeedSensor: public SensorInterface
-{
-        public:
-            int   getCurrentSpeed() override{
-                std::random_device rd;
-                std::mt19937 gen(rd());
-                std::uniform_int_distribution<> distr(1, 100);
-                return distr(gen);
-            }
-};
-
 
 class SensorInterface
 {
@@ -38,19 +33,24 @@ class SensorInterface
       }
 };
 
-class CloundInterface
+class BNFSpeedSensor: public SensorInterface
 {
-    public:
-    virtual int pushMessage(string) =0;
-}
+        public:
+            int   getCurrentSpeed() override{
+                std::random_device rd;
+                std::mt19937 gen(rd());
+                std::uniform_int_distribution<> distr(1, 100);
+                return distr(gen);
+            }
+};
 
-Class Logger{
+class Logger{
   
   public:
-    logMsg(string msg){
+    void logMsg(string msg){
       cout << msg << endl;
     }
-}
+};
 
 
 class SpeedMonitor{
@@ -71,37 +71,40 @@ class SpeedMonitor{
             bool retVal = false;
             
             if(_speedThreshold  < 1 || _speedThreshold > 100){
-              logPtr->logMsg("_speedThreshold value must be in the ramge {1-100}");
-              logPtr->logMsg(to_string(_speedThreshold));
+              _logPtr->logMsg("_speedThreshold value must be in the ramge {1-100}");
+              _logPtr->logMsg(to_string(_speedThreshold));
               retVal = true;
             }
             
             return retVal;
           }
               
-          void monitor (SensorInterface & sensorObj, CloundInterface&  cloudObj, 
+          void monitor (SensorInterface & sensorObj, CloudInterface&  cloudObj, 
            bool isSpeedAboveThresold) {
                  int currentSpeed = sensorObj.getCurrentSpeed();
-                 logPtr->logMsg("Current Speed In Kmph ");
-                 logPtr->logMsg(to_string(currentSpeed));
+                 _logPtr->logMsg("Current Speed In Kmph ");
+                 _logPtr->logMsg(to_string(currentSpeed));
                  
-                 if(currentSpeedInKmph > _speedThreshold){
+                 if(currentSpeed > _speedThreshold){
                       
-                      logPtr->logMsg("Current speed is greater than Theshold");
+                      _logPtr->logMsg("Current speed is greater than Theshold");
                       isSpeedAboveThresold = false;
                  }
                  else
                  {
                        double mph = sensorObj.convertToMph(currentSpeed);
                        
-                       logPtr->logMsg("Current Speed in Miles");
-                       logPtr->logMsg(to_string(mph));
+                       _logPtr->logMsg("Current Speed in Miles");
+                       _logPtr->logMsg(to_string(mph));
 
+                       string message =   "Current Speed in Miles" +
+                                              to_string(mph);
+                        
                        int statusCode= cloudObj.pushMessage(message);
                        
                         if(statusCode > 400){
                           
-                           logPtr->logMsg("Error In Communication Unable to Contact Server");
+                           _logPtr->logMsg("Error In Communication Unable to Contact Server");
                            //Log Message to Console
                           // cout<<"Error In Communication Unable to Contact Server "<<message<< endl;
                         }
@@ -110,10 +113,7 @@ class SpeedMonitor{
                   }
                        
                  }
-                 
-            }
-              
-          }
+
 };
 
 int main(){
